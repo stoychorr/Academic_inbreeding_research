@@ -1,0 +1,515 @@
+---
+title: "regressions"
+output: html_notebook
+---
+
+```{r}
+library(readxl)
+inbreeding_at_FEBA <- read_excel("C:/Users/Stoycho.rusinov/Desktop/inbreeding/Regressions/inbreeding_at_FEBA.xlsx", 
+    sheet = "main_database", col_types = c("text", 
+        "text", "text", "text", 
+        "text", "text", "text", "text", "text","text", 
+        "date", "date", "text", "text", "numeric", 
+        "numeric", "text", "numeric", "numeric", 
+        "text", "text", "text", "numeric", 
+        "numeric", "numeric", "text"))
+inbreeding_at_FEBA<-inbreeding_at_FEBA[,-c(25,26)]
+head(inbreeding_at_FEBA)
+```
+
+#Productivity <- Inbreeding
+
+```{r}
+library(sandwich)
+library(stargazer)
+
+m1 <- lm(log(Scopus_all + 1) ~ AI, data = inbreeding_at_FEBA)
+m2 <- lm(log(Scopus_all + 1) ~ AI + as.numeric(Time_from_phd_to_FEBA)+as.factor(Gender), data = inbreeding_at_FEBA)
+m3 <- lm(log(Scopus_all + 1) ~ AI + as.numeric(Time_from_phd_to_FEBA)+as.factor(Gender) + factor(Academic_title),
+         data = inbreeding_at_FEBA)
+m4 <- lm(log(Scopus_all + 1) ~ AI + as.numeric(Time_from_phd_to_FEBA)+as.factor(Gender) +  + factor(Department),
+         data = inbreeding_at_FEBA)
+m5 <- lm(log(Scopus_all + 1) ~ AI  +as.numeric(International_collaboration) + as.numeric(Only_national_collab) + as.numeric(Only_institutional_collaboration),
+         data = inbreeding_at_FEBA)
+
+# HC3 robust SEs for each model
+se_list <- lapply(list(m1, m2, m3, m4, m5), function(m) {
+  sqrt(diag(vcovHC(m, type = "HC3")))
+})
+
+stargazer(m1, m2, m3, m4, m5,
+          se = se_list,
+          type = "text",
+          keep.stat = c("n", "rsq", "adj.rsq"),
+          star.cutoffs = c(0.10, 0.05, 0.01))
+```
+
+```{r}
+library(AER)
+library(sandwich)
+library(lmtest)
+library(stargazer)
+
+d <- inbreeding_at_FEBA
+
+tmp <- trimws(as.character(d$Time_from_phd_to_FEBA))
+tmp[tmp %in% c("", "UNKNOWN", "NA", "N/A")] <- NA
+d$Time_from_phd_to_FEBA_num <- suppressWarnings(as.numeric(tmp))
+
+cat("Instrument NA count:", sum(is.na(d$Time_from_phd_to_FEBA_num)), "out of", nrow(d), "\n")
+
+# Make sure AI is numeric (0/1) if it came as factor/character
+d$AI <- suppressWarnings(as.numeric(as.character(d$AI)))
+
+# Optional: if these are 0/1 or Yes/No as text, normalize them
+to_num01 <- function(x) {
+  x <- trimws(tolower(as.character(x)))
+  out <- rep(NA_real_, length(x))
+  out[x %in% c("1","yes","да","true","y","t")] <- 1
+  out[x %in% c("0","no","не","false","n","f")] <- 0
+  # fallback: try numeric
+  num <- suppressWarnings(as.numeric(x))
+  out[is.na(out) & !is.na(num)] <- num[is.na(out) & !is.na(num)]
+  out
+}
+
+d$International_collaboration_num        <- to_num01(d$International_collaboration)
+d$Only_national_collab_num               <- to_num01(d$Only_national_collab)
+d$Only_institutional_collaboration_num   <- to_num01(d$Only_institutional_collaboration)
+
+iv1 <- ivreg(
+  log(Scopus_all + 1) ~ AI |
+    Time_from_phd_to_FEBA_num,
+  data = d
+)
+
+iv2 <- ivreg(
+  log(Scopus_all + 1) ~ AI + as.factor(Gender) |
+    Time_from_phd_to_FEBA_num + as.factor(Gender),
+  data = d
+)
+
+iv3 <- ivreg(
+  log(Scopus_all + 1) ~ AI + as.factor(Gender) + factor(Academic_title) |
+    Time_from_phd_to_FEBA_num + as.factor(Gender) + factor(Academic_title),
+  data = d
+)
+
+iv4 <- ivreg(
+  log(Scopus_all + 1) ~ AI + as.factor(Gender) + factor(Department) |
+    Time_from_phd_to_FEBA_num + as.factor(Gender) + factor(Department),
+  data = d
+)
+
+iv5 <- ivreg(
+  log(Scopus_all + 1) ~ AI +
+    International_collaboration_num + Only_national_collab_num + Only_institutional_collaboration_num |
+    Time_from_phd_to_FEBA_num +
+    International_collaboration_num + Only_national_collab_num + Only_institutional_collaboration_num,
+  data = d
+)
+
+hc3 <- function(m) sqrt(diag(vcovHC(m, type = "HC3")))
+se_list_iv <- lapply(list(iv1, iv2, iv3, iv4, iv5), hc3)
+
+stargazer(iv1, iv2, iv3, iv4, iv5,
+          se = se_list_iv,
+          type = "text",
+          keep.stat = c("n", "rsq", "adj.rsq"),
+          star.cutoffs = c(0.10, 0.05, 0.01))
+
+
+summary(iv3, diagnostics = TRUE)
+```
+
+```{r}
+d0 <- subset(d, AI == 0)
+m_placebo0 <- lm(log(Scopus_all + 1) ~ Time_from_phd_to_FEBA_num +
+                   as.factor(Gender) + factor(Academic_title),
+                 data = d0)
+summary(m_placebo0)
+```
+
+```{r}
+d1 <- subset(d, AI == 1)
+m_placebo1 <- lm(log(Scopus_all + 1) ~ Time_from_phd_to_FEBA_num +
+                   as.factor(Gender) + factor(Academic_title),
+                 data = d1)
+summary(m_placebo1)
+```
+
+```{r}
+# Example: balance on gender (should be ~0 if Z is as-if random conditional on controls)
+bal_gender <- lm(as.numeric(as.factor(Gender)) ~ Time_from_phd_to_FEBA_num, data=d)
+summary(bal_gender)
+
+# If you have Age or BirthYear:
+# bal_age <- lm(Age ~ Time_from_phd_to_FEBA_num, data=d)
+# summary(bal_age)
+```
+
+#Inbreeding <- Productivity
+
+```{r}
+library(sandwich)
+library(stargazer)
+
+g1 <- glm(AI ~ log(Scopus_all + 1),
+          data = inbreeding_at_FEBA,
+          family = binomial(link = "logit"))
+
+g2 <- glm(AI ~ log(Scopus_all + 1)+as.factor(Gender) + ifelse(as.numeric(Time_from_phd_to_FEBA)<365,1,0),
+          data = inbreeding_at_FEBA,
+          family = binomial(link = "logit"))
+
+g3 <- glm(AI ~ log(Scopus_all + 1)+as.factor(Gender) + ifelse(as.numeric(Time_from_phd_to_FEBA)<365,1,0) + as.factor(Academic_title),
+          data = inbreeding_at_FEBA,
+          family = binomial(link = "logit"))
+
+g4 <- glm(AI ~ log(Scopus_all + 1) +as.factor(Gender)+ ifelse(as.numeric(Time_from_phd_to_FEBA)<365,1,0) + as.factor(Department),
+          data = inbreeding_at_FEBA,
+          family = binomial(link = "logit"))
+
+g5 <- glm(AI ~ log(Scopus_all + 1)+as.factor(Gender) + ifelse(as.numeric(Time_from_phd_to_FEBA)<365,1,0) + + as.numeric(International_collaboration) + as.numeric(Only_national_collab) + as.numeric(Only_institutional_collaboration),
+          data = inbreeding_at_FEBA,
+          family = binomial(link = "logit"))
+
+
+stargazer(g1, g2, g3, g4, g5,
+          type = "text",
+          keep.stat = c("n"),
+          star.cutoffs = c(0.10, 0.05, 0.01),
+          dep.var.labels = "Probability(Inbred hire)",
+          omit.stat = c("ll","aic","bic"))
+
+```
+
+```{r}
+library(broom)
+library(dplyr)
+library(ggplot2)
+
+df <- tidy(g_margins) %>%
+  filter(term != "(Intercept)") %>%
+  mutate(
+    term = recode(term,
+      "log(Scopus_all + 1)" = "Research productivity",
+      "ifelse(as.numeric(Time_from_phd_to_FEBA) < 365, 1, 0)" = "Hired within 1 year of PhD",
+      "as.factor(Gender)1" = "Male",
+
+      # Departments
+      "as.factor(Department)Econometrics and statistics" = "Department: Econometrics and Statistics",
+      "as.factor(Department)Economics" = "Department: Economics",
+      "as.factor(Department)ESG" = "Department: ESG",
+      "as.factor(Department)FA" = "Department: Finance and Accounting",
+
+      # Academic titles
+      "as.factor(Academic_title)Гл. ас." = "Chief assistant",
+      "as.factor(Academic_title)Доц." = "Associate professor",
+      "as.factor(Academic_title)Проф." = "Professor",
+
+      # FIX THESE THREE
+      "as.numeric(Only_institutional_collaboration)" = "Only institutional collaboration",
+      "as.numeric(Only_national_collab)" = "Only national collaboration",
+      "as.numeric(International_collaboration)" = "International collaboration"
+    ),
+    low = estimate - 1.96 * std.error,
+    high = estimate + 1.96 * std.error
+  )
+
+ggplot(df, aes(x = estimate, y = reorder(term, estimate))) +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "grey60") +
+  geom_errorbarh(aes(xmin = low, xmax = high), height = 0.15) +
+  geom_point(size = 3) +
+  labs(
+    title = "Factors associated with inbred hiring",
+    x = "Coefficient",
+    y = NULL
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    legend.position = "none",
+    panel.grid.minor = element_blank(),
+    panel.grid.major.y = element_blank()
+  )
+```
+
+```{r}
+library(sandwich)
+library(stargazer)
+
+g1 <- glm(AI ~ log(Scopus_all + 1),
+          data = inbreeding_at_FEBA,
+          family = binomial(link = "logit"))
+
+g2 <- glm(AI ~ log(Scopus_all + 1) + as.numeric(Time_from_phd_to_FEBA),
+          data = inbreeding_at_FEBA,
+          family = binomial(link = "logit"))
+
+g3 <- glm(AI ~ log(Scopus_all + 1) + as.numeric(Time_from_phd_to_FEBA) + as.factor(Academic_title),
+          data = inbreeding_at_FEBA,
+          family = binomial(link = "logit"))
+
+g4 <- glm(AI ~ log(Scopus_all + 1) + as.numeric(Time_from_phd_to_FEBA)  + as.factor(Department),
+          data = inbreeding_at_FEBA,
+          family = binomial(link = "logit"))
+
+g5 <- glm(AI ~ log(Scopus_all + 1) + as.numeric(Time_from_phd_to_FEBA) + as.numeric(International_collaboration) + as.numeric(Only_national_collab) + as.numeric(Only_institutional_collaboration),
+          data = inbreeding_at_FEBA,
+          family = binomial(link = "logit"))
+
+
+stargazer(g1, g2, g3, g4, g5,
+          type = "text",
+          keep.stat = c("n"),
+          star.cutoffs = c(0.10, 0.05, 0.01),
+          dep.var.labels = "Probability(Inbred hire)",
+          omit.stat = c("ll","aic","bic"))
+g_margins <- glm(AI ~ log(Scopus_all + 1) + ifelse(as.numeric(Time_from_phd_to_FEBA)<365,1,0) + as.factor(Academic_title) + as.factor(Department) + as.numeric(International_collaboration) + as.numeric(Only_national_collab) + as.numeric(Only_institutional_collaboration),
+          data = inbreeding_at_FEBA,
+          family = binomial(link = "logit"))
+
+```
+
+
+
+
+```{r}
+packs <- c("marginaleffects","ggplot2")
+newpacks <- packs[!(packs %in% installed.packages()[,"Package"])]
+if(length(newpacks)) install.packages(newpacks)
+
+library(marginaleffects)
+library(ggplot2)
+
+# helper to extract the fast-hire effect
+get_fast <- function(model, name){
+  mfx <- avg_slopes(model)
+  out <- mfx[grep("Time_from_phd_to_FEBA", mfx$term), ]
+  if(nrow(out)==0) return(NULL)
+  out$model <- name
+  return(out)
+}
+
+plotdata <- rbind(
+  get_fast(g1,"Model 1"),
+  get_fast(g2,"Model 2"),
+  get_fast(g3,"Model 3"),
+  get_fast(g4,"Model 4"),
+  get_fast(g5,"Model 5")
+)
+
+# clean model ordering
+plotdata$model <- factor(plotdata$model,
+                         levels=c("Model 1","Model 2","Model 3","Model 4","Model 5"))
+
+
+## Plot
+############################################################
+
+ggplot(plotdata, aes(x=model, y=estimate)) +
+  geom_point(size=3) +
+  geom_errorbar(aes(ymin=conf.low, ymax=conf.high), width=.12) +
+  geom_hline(yintercept=0, linetype="dashed") +
+  labs(
+    y="Marginal effect on Pr(Inbred hire)",
+    x="Specification",
+    title="Effect of Immediate Hiring (within 1 year after PhD or less)"
+  ) +
+  theme_minimal(base_size = 14)
+```
+
+#Interactions
+
+```{r}
+
+# Packages
+packs <- c("sandwich","stargazer")
+newpacks <- packs[!(packs %in% installed.packages()[,"Package"])]
+if(length(newpacks)) install.packages(newpacks)
+
+library(sandwich)
+library(stargazer)
+
+# --- (Optional but recommended) quick type clean ---
+to_num <- function(x) {
+  if (is.numeric(x)) return(x)
+  x <- as.character(x)
+  x <- gsub(",", ".", x, fixed = TRUE)
+  suppressWarnings(as.numeric(x))
+}
+
+inbreeding_at_FEBA$Scopus_all <- to_num(inbreeding_at_FEBA$Scopus_all)
+inbreeding_at_FEBA$Time_from_phd_to_FEBA <- to_num(inbreeding_at_FEBA$Time_from_phd_to_FEBA)
+inbreeding_at_FEBA$AI <- to_num(inbreeding_at_FEBA$AI)
+inbreeding_at_FEBA$International_collaboration <- to_num(inbreeding_at_FEBA$International_collaboration)
+inbreeding_at_FEBA$Only_national_collab <- to_num(inbreeding_at_FEBA$Only_national_collab)
+inbreeding_at_FEBA$Only_institutional_collaboration <- to_num(inbreeding_at_FEBA$Only_institutional_collaboration)
+
+# --- Robust SEs that ALWAYS align with coefficients (fixes missing SE rows) ---
+robust_se_HC3 <- function(m){
+  cn <- names(coef(m))
+  V  <- vcovHC(m, type = "HC3")
+  se <- rep(NA_real_, length(cn))
+  names(se) <- cn
+  common <- intersect(cn, colnames(V))
+  se[common] <- sqrt(diag(V))[common]
+  se
+}
+
+# --- Baseline model (your m5) ---
+m5 <- lm(log(Scopus_all + 1) ~ AI + ifelse(as.numeric(Time_from_phd_to_FEBA)<365,1,0) +
+           factor(Academic_title) + factor(Department) ,
+         data = inbreeding_at_FEBA)
+
+# --- Interactions ---
+# AI × Title
+m6_rank <- lm(log(Scopus_all + 1) ~ AI * factor(Academic_title) + ifelse(as.numeric(Time_from_phd_to_FEBA)<365,1,0) +
+                factor(Department) ,
+              data = inbreeding_at_FEBA)
+
+# AI × International collaboration
+m7_net <- lm(log(Scopus_all + 1) ~ AI * International_collaboration + ifelse(as.numeric(Time_from_phd_to_FEBA)<365,1,0) +
+               factor(Academic_title) + factor(Department) ,
+             data = inbreeding_at_FEBA)
+
+# AI × Department
+m8_dept <- lm(log(Scopus_all + 1) ~ AI * factor(Department) + ifelse(as.numeric(Time_from_phd_to_FEBA)<365,1,0) +
+                factor(Academic_title) +
+                International_collaboration ,
+              data = inbreeding_at_FEBA)
+
+# --- Robust SE lists ---
+models  <- list(m5, m6_rank, m7_net, m8_dept)
+se_list <- lapply(models, robust_se_HC3)
+
+# --- Output table ---
+stargazer(models,
+          type = "text",
+          column.labels = c("Baseline", "AI×Title", "AI×IntlCollab", "AI×Dept"),
+          dep.var.labels = "log(Scopus + 1)",
+          keep.stat = c("n", "rsq", "adj.rsq"),
+          star.cutoffs = c(0.10, 0.05, 0.01),
+          omit.stat = c("f","ser"))
+```
+
+#time from first employment to PHD
+
+```{r}
+## Economist-style "dumbbell timeline":
+## PhD award (black hollow) vs first FEBA employment (red filled)
+
+
+packs <- c("dplyr","tidyr","ggplot2","lubridate","scales")
+newpacks <- packs[!(packs %in% installed.packages()[,"Package"])]
+if(length(newpacks)) install.packages(newpacks)
+
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(lubridate)
+library(scales)
+
+# --- robust date parser for Excel / strings ---
+parse_date_safe <- function(x){
+  if (inherits(x, "Date")) return(x)
+  if (inherits(x, "POSIXct") || inherits(x, "POSIXt")) return(as.Date(x))
+  if (is.numeric(x)) return(as.Date(x, origin = "1899-12-30"))  # Excel serials
+  x <- trimws(as.character(x))
+  x[x == "" | x %in% c("NA","N/A","na")] <- NA
+  d <- suppressWarnings(as.Date(x))
+  if (all(is.na(d))) {
+    d <- suppressWarnings(parse_date_time(x, orders = c(
+      "Y-m-d","d-m-Y","d/m/Y","m/d/Y","Y/m/d","d.b.Y","d.b.y","d.m.Y","d.m.y"
+    )))
+    return(as.Date(d))
+  }
+  d
+}
+
+# --- build plotting frame ---
+df <- inbreeding_at_FEBA %>%
+  transmute(
+    phd  = parse_date_safe(PHD_Awarded),
+    hire = parse_date_safe(FIRST_PT_FEBA)
+  ) %>%
+  filter(!is.na(phd), !is.na(hire)) %>%
+  mutate(
+    gap_days = as.numeric(hire - phd),
+    gap_years = gap_days / 365.25
+  )
+
+# order rows like the example: by hire date (or by gap; choose one)
+df <- df %>%
+  arrange(hire, phd) %>%
+  mutate(person = row_number())  # anonymous index, like the screenshot
+
+# --- plot ---
+p <- ggplot(df, aes(y = reorder(factor(person), hire))) +
+  # connecting line
+  geom_segment(aes(x = phd, xend = hire, yend = reorder(factor(person), hire)),
+               linewidth = 0.7, color = "grey80") +
+  # phd point (black hollow)
+  geom_point(aes(x = phd), shape = 21, size = 3.0,
+             stroke = 1.0, fill = "white", color = "black") +
+  # hire point (red filled)
+  geom_point(aes(x = hire), shape = 16, size = 2.6, color = "red3") +
+  # a clean x-axis with years
+  scale_x_date(date_breaks = "4 years", date_labels = "%Y") +
+  labs(
+    title = "First academic employment vs PhD award at FEBA",
+    subtitle = "Hire date in red (filled); PhD award in black (hollow)",
+    x = NULL,
+    y = NULL
+  ) +
+  theme_minimal(base_size = 16) +
+  theme(
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor = element_blank(),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
+    plot.title = element_text(face = "bold"),
+    plot.subtitle = element_text(color = "grey30"),
+    axis.text.x = element_text(color = "grey20"),
+    panel.grid.major.x = element_line(color = "grey90"),
+    plot.margin = margin(10, 15, 10, 10)
+  )
+
+print(p)
+```
+```{r}
+library(dplyr)
+library(lubridate)
+
+parse_date_safe <- function(x){
+  if (inherits(x, "Date")) return(x)
+  if (is.numeric(x)) return(as.Date(x, origin="1899-12-30"))
+  suppressWarnings(as.Date(x))
+}
+
+df <- inbreeding_at_FEBA %>%
+  mutate(
+    phd  = parse_date_safe(PHD_Awarded),
+    hire = parse_date_safe(FIRST_PT_FEBA),
+    delay_days  = as.numeric(phd-hire),
+    delay_years = delay_days / 365.25,
+    phd_year = year(phd)
+  ) %>%
+  filter(!is.na(delay_days))
+
+df$post2010 <- ifelse(df$phd_year >= 2010, 1, 0)
+t.test(delay_years ~ post2010, data=df)
+m_delay <- lm(delay_years ~ post2010, data=df)
+summary(m_delay)
+m_delay2 <- lm(delay_years ~ post2010 + factor(Department) + factor(Academic_title)+factor(Gender),
+               data=df)
+summary(m_delay2)
+install.packages("survival")
+library(survival)
+cox <- coxph(
+  Surv(delay_days) ~ post2010 + factor(Department),
+  data = df
+)
+summary(cox)
+```
+
