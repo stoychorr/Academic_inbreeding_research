@@ -1,0 +1,1386 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd"><key id="d5" for="edge" attr.name="weight" attr.type="double"/>
+<key id="d4" for="node" attr.name="in_giant" attr.type="long"/>
+<key id="d3" for="node" attr.name="faculty" attr.type="long"/>
+<key id="d2" for="node" attr.name="katz" attr.type="double"/>
+<key id="d1" for="node" attr.name="eigen" attr.type="double"/>
+<key id="d0" for="node" attr.name="strength" attr.type="double"/>
+<graph edgedefault="undirected"><node id="Димитър Златинов">
+  <data key="d0">3.0</data>
+  <data key="d1">0.0032</data>
+  <data key="d2">0.1039</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Мариела Ненова-Амар">
+  <data key="d0">1.0</data>
+  <data key="d1">0.0012</data>
+  <data key="d2">0.059</data>
+  <data key="d3">0</data>
+  <data key="d4">1</data>
+</node>
+<node id="Теодор Седларски">
+  <data key="d0">4.5</data>
+  <data key="d1">0.0096</data>
+  <data key="d2">0.164</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Нансен Бахар">
+  <data key="d0">1.0</data>
+  <data key="d1">0.0036</data>
+  <data key="d2">0.0781</data>
+  <data key="d3">0</data>
+  <data key="d4">1</data>
+</node>
+<node id="Милен Велушев">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0096</data>
+  <data key="d2">0.0955</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Стефан Христов Петранов">
+  <data key="d0">3.5</data>
+  <data key="d1">0.0209</data>
+  <data key="d2">0.1365</data>
+  <data key="d3">0</data>
+  <data key="d4">1</data>
+</node>
+<node id="Стела Ралева">
+  <data key="d0">3.5</data>
+  <data key="d1">0.0027</data>
+  <data key="d2">0.092</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Стати Василев Статев">
+  <data key="d0">1.0</data>
+  <data key="d1">0.001</data>
+  <data key="d2">0.0552</data>
+  <data key="d3">0</data>
+  <data key="d4">1</data>
+</node>
+<node id="Цветан Мадански">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0881</data>
+  <data key="d2">0.0876</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Тодор Попов">
+  <data key="d0">1.0</data>
+  <data key="d1">0.033</data>
+  <data key="d2">0.0538</data>
+  <data key="d3">0</data>
+  <data key="d4">1</data>
+</node>
+<node id="Желю Дечев Владимиров">
+  <data key="d0">5.5</data>
+  <data key="d1">0.4049</data>
+  <data key="d2">0.2798</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Даниел Касабов">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0496</data>
+  <data key="d3">1</data>
+  <data key="d4">0</data>
+</node>
+<node id="Петър Пандушев Чобанов">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0496</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Илия Атанасов">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0029</data>
+  <data key="d2">0.0902</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Георги Димитров Менгов">
+  <data key="d0">4.5</data>
+  <data key="d1">0.006</data>
+  <data key="d2">0.1499</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Росица Златинска">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0496</data>
+  <data key="d3">1</data>
+  <data key="d4">0</data>
+</node>
+<node id="Пенчо Денчев Пенчев">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0496</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Любен Иванов">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0615</data>
+  <data key="d2">0.1264</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Георги Савов Чобанов">
+  <data key="d0">5.5</data>
+  <data key="d1">0.1538</data>
+  <data key="d2">0.2476</data>
+  <data key="d3">0</data>
+  <data key="d4">1</data>
+</node>
+<node id="Стоян Шаламанов">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0439</data>
+  <data key="d3">1</data>
+  <data key="d4">0</data>
+</node>
+<node id="Трайчо Стефанов Спасов">
+  <data key="d0">1.0</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0399</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Екатерина Стефанова Сотирова-Петкова">
+  <data key="d0">0.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0329</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Радостина Ивчева-Георгиева">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0083</data>
+  <data key="d2">0.084</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Диляна Славова">
+  <data key="d0">1.0</data>
+  <data key="d1">0.0012</data>
+  <data key="d2">0.059</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Илия Лингорски">
+  <data key="d0">1.0</data>
+  <data key="d1">0.001</data>
+  <data key="d2">0.0552</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Лидия Кабатлийска-Андонова">
+  <data key="d0">1.0</data>
+  <data key="d1">0.001</data>
+  <data key="d2">0.0552</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Олимпия Ведър-Величкова">
+  <data key="d0">2.5</data>
+  <data key="d1">0.2423</data>
+  <data key="d2">0.1696</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Цветан Първанов Давидков">
+  <data key="d0">6.0</data>
+  <data key="d1">0.5193</data>
+  <data key="d2">0.3293</data>
+  <data key="d3">0</data>
+  <data key="d4">1</data>
+</node>
+<node id="Иванка Тодорова Мавродиева-Георгиева">
+  <data key="d0">0.5</data>
+  <data key="d1">0.0453</data>
+  <data key="d2">0.0529</data>
+  <data key="d3">0</data>
+  <data key="d4">1</data>
+</node>
+<node id="Десислава Иванова Йорданова">
+  <data key="d0">3.0</data>
+  <data key="d1">0.0787</data>
+  <data key="d2">0.1001</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Мария-Антония Таразон Родон">
+  <data key="d0">1.0</data>
+  <data key="d1">0.0294</data>
+  <data key="d2">0.0578</data>
+  <data key="d3">0</data>
+  <data key="d4">1</data>
+</node>
+<node id="Хуан Хосе Хименес">
+  <data key="d0">0.5</data>
+  <data key="d1">0.0147</data>
+  <data key="d2">0.0419</data>
+  <data key="d3">0</data>
+  <data key="d4">1</data>
+</node>
+<node id="Владя Борисова">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0452</data>
+  <data key="d3">1</data>
+  <data key="d4">0</data>
+</node>
+<node id="Божана Неделчева">
+  <data key="d0">1.0</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0403</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Пано Лулански">
+  <data key="d0">1.0</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0403</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Мирослава Христова">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0439</data>
+  <data key="d3">1</data>
+  <data key="d4">0</data>
+</node>
+<node id="Жан-Пиер Ньово">
+  <data key="d0">1.0</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0399</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Жером Каби">
+  <data key="d0">0.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0329</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Тодор Ялъмов">
+  <data key="d0">1.5</data>
+  <data key="d1">0.1474</data>
+  <data key="d2">0.1196</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Анастасия Миланова Бънкова">
+  <data key="d0">3.0</data>
+  <data key="d1">0.1341</data>
+  <data key="d2">0.1298</data>
+  <data key="d3">0</data>
+  <data key="d4">1</data>
+</node>
+<node id="Ия Петкова">
+  <data key="d0">1.5</data>
+  <data key="d1">0.2701</data>
+  <data key="d2">0.1752</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Иван Ангелов">
+  <data key="d0">1.5</data>
+  <data key="d1">0.1474</data>
+  <data key="d2">0.1196</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Иванка Михайлова">
+  <data key="d0">1.5</data>
+  <data key="d1">0.2701</data>
+  <data key="d2">0.1752</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Рая Каназирева">
+  <data key="d0">1.5</data>
+  <data key="d1">0.2091</data>
+  <data key="d2">0.1466</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Кирил Величков">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0452</data>
+  <data key="d3">1</data>
+  <data key="d4">0</data>
+</node>
+<node id="Магдалена Иванова">
+  <data key="d0">1.0</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0403</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Ирена Младенова">
+  <data key="d0">1.5</data>
+  <data key="d1">0.1054</data>
+  <data key="d2">0.0958</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Алексей Потебня">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0323</data>
+  <data key="d2">0.0665</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Невяна Кръстева">
+  <data key="d0">2.0</data>
+  <data key="d1">0.047</data>
+  <data key="d2">0.0773</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Златина Михайлова">
+  <data key="d0">1.5</data>
+  <data key="d1">0.157</data>
+  <data key="d2">0.1222</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Ия Тодорова Петкова-Гурбалова">
+  <data key="d0">0.5</data>
+  <data key="d1">0.0294</data>
+  <data key="d2">0.0454</data>
+  <data key="d3">0</data>
+  <data key="d4">1</data>
+</node>
+<node id="Николета Войнова">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0439</data>
+  <data key="d3">1</data>
+  <data key="d4">0</data>
+</node>
+<node id="Георги Н. Георгиев">
+  <data key="d0">1.0</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0399</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Слави М. Славов">
+  <data key="d0">0.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0329</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Божидар Недев">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0075</data>
+  <data key="d2">0.0998</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Виктор Йоцов">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0439</data>
+  <data key="d3">1</data>
+  <data key="d4">0</data>
+</node>
+<node id="Гарабед Минасян">
+  <data key="d0">1.0</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0399</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Васил Тодоров">
+  <data key="d0">0.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0329</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Елеонора Станчева">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0439</data>
+  <data key="d3">1</data>
+  <data key="d4">0</data>
+</node>
+<node id="Катерина Караиванова">
+  <data key="d0">1.0</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0399</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Коста Пергелов">
+  <data key="d0">0.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0329</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Адриан Маринчев">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0544</data>
+  <data key="d3">1</data>
+  <data key="d4">0</data>
+</node>
+<node id="Стоян Димитров Стоянов">
+  <data key="d0">2.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.072</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Иван Душанов Иванов">
+  <data key="d0">0.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0346</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Илияна Анкова">
+  <data key="d0">1.5</data>
+  <data key="d1">0.1333</data>
+  <data key="d2">0.1492</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Марселен Йовоган">
+  <data key="d0">2.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0603</data>
+  <data key="d3">1</data>
+  <data key="d4">0</data>
+</node>
+<node id="Иван Брешков">
+  <data key="d0">1.0</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0451</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Кольо Рачев">
+  <data key="d0">0.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0355</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Георги Ганев">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0439</data>
+  <data key="d3">1</data>
+  <data key="d4">0</data>
+</node>
+<node id="Уилям Барнет">
+  <data key="d0">1.0</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0399</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Стивън Фазари">
+  <data key="d0">0.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0329</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Стойко Митов">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0054</data>
+  <data key="d2">0.1042</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Николай Кацарски">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0603</data>
+  <data key="d3">1</data>
+  <data key="d4">0</data>
+</node>
+<node id="Марио Касабов">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0452</data>
+  <data key="d3">1</data>
+  <data key="d4">0</data>
+</node>
+<node id="Димитър Ненков Ненков">
+  <data key="d0">1.0</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0403</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Богомил Борисов Манов">
+  <data key="d0">1.0</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0403</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Данаил Гушев">
+  <data key="d0">1.0</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0451</data>
+  <data key="d3">1</data>
+  <data key="d4">0</data>
+</node>
+<node id="Марина Стефанова">
+  <data key="d0">1.5</data>
+  <data key="d1">0.2487</data>
+  <data key="d2">0.1673</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Антон Антонов Герунов">
+  <data key="d0">2.0</data>
+  <data key="d1">0.0068</data>
+  <data key="d2">0.1098</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Соня Милева - Божанова">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0452</data>
+  <data key="d3">1</data>
+  <data key="d4">0</data>
+</node>
+<node id="Манол Рибов">
+  <data key="d0">1.0</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0403</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Ангел Геров">
+  <data key="d0">1.0</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0403</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Георги Сотиров">
+  <data key="d0">1.0</data>
+  <data key="d1">0.0022</data>
+  <data key="d2">0.0736</data>
+  <data key="d3">0</data>
+  <data key="d4">1</data>
+</node>
+<node id="Стефан Хаджитодоров">
+  <data key="d0">0.5</data>
+  <data key="d1">0.0011</data>
+  <data key="d2">0.0498</data>
+  <data key="d3">0</data>
+  <data key="d4">1</data>
+</node>
+<node id="Светлана Бялкова">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0439</data>
+  <data key="d3">1</data>
+  <data key="d4">0</data>
+</node>
+<node id="Дж. Шриеферс">
+  <data key="d0">1.0</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0399</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="X. Деккерс">
+  <data key="d0">0.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0329</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Теодора Георгиева">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0452</data>
+  <data key="d3">1</data>
+  <data key="d4">0</data>
+</node>
+<node id="Димитър Панайотов">
+  <data key="d0">1.0</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0403</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Фантина Рангелова">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0439</data>
+  <data key="d3">1</data>
+  <data key="d4">0</data>
+</node>
+<node id="Димитър Паничков">
+  <data key="d0">1.0</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0399</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Гочо Гочев">
+  <data key="d0">0.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0329</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Атанас Димитров Георгиев">
+  <data key="d0">2.0</data>
+  <data key="d1">0.072</data>
+  <data key="d2">0.1259</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Антоанета Симова">
+  <data key="d0">0.5</data>
+  <data key="d1">0.0135</data>
+  <data key="d2">0.046</data>
+  <data key="d3">0</data>
+  <data key="d4">1</data>
+</node>
+<node id="Десислава Калчева">
+  <data key="d0">1.0</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0381</data>
+  <data key="d3">1</data>
+  <data key="d4">0</data>
+</node>
+<node id="Пресияна Стойкова Ненкова">
+  <data key="d0">1.0</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0381</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Емил Митов">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0439</data>
+  <data key="d3">1</data>
+  <data key="d4">0</data>
+</node>
+<node id="Лиляна Павлова">
+  <data key="d0">1.0</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0399</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Стефан Ангелов Симеонов">
+  <data key="d0">0.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0329</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Ивайло Найденов">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0439</data>
+  <data key="d3">1</data>
+  <data key="d4">0</data>
+</node>
+<node id="Калин Боянов Филипов">
+  <data key="d0">1.0</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0399</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Бончо Иванов Бонев">
+  <data key="d0">0.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0329</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Мария Трифонова">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0637</data>
+  <data key="d2">0.0873</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Мартина Арабаджиева">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0014</data>
+  <data key="d2">0.051</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Албена Христова Вуцова">
+  <data key="d0">2.0</data>
+  <data key="d1">0.0035</data>
+  <data key="d2">0.0616</data>
+  <data key="d3">0</data>
+  <data key="d4">1</data>
+</node>
+<node id="Мария Стойчева">
+  <data key="d0">0.5</data>
+  <data key="d1">0.0003</data>
+  <data key="d2">0.0341</data>
+  <data key="d3">0</data>
+  <data key="d4">1</data>
+</node>
+<node id="Петър Ташев">
+  <data key="d0">1.5</data>
+  <data key="d1">0.2487</data>
+  <data key="d2">0.1673</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Рени Панчева">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0035</data>
+  <data key="d2">0.0911</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Николай Чудомиров Нетов">
+  <data key="d0">2.0</data>
+  <data key="d1">0.0362</data>
+  <data key="d2">0.0982</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Боян Михайлов Ломев">
+  <data key="d0">2.0</data>
+  <data key="d1">0.0158</data>
+  <data key="d2">0.0728</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Иван Иванов">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0439</data>
+  <data key="d3">1</data>
+  <data key="d4">0</data>
+</node>
+<node id="М. Петков">
+  <data key="d0">1.0</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0399</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="М. Касчиев">
+  <data key="d0">0.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0329</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Камен Спасов">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0439</data>
+  <data key="d3">1</data>
+  <data key="d4">0</data>
+</node>
+<node id="Минчо Халжийски">
+  <data key="d0">1.0</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0399</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Гео Гатев">
+  <data key="d0">0.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0329</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Деян Радев">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0439</data>
+  <data key="d3">1</data>
+  <data key="d4">0</data>
+</node>
+<node id="Изабел Шнабел">
+  <data key="d0">1.0</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0399</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Михаел Биндер">
+  <data key="d0">0.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0329</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Ангел А. Марчев">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0466</data>
+  <data key="d3">1</data>
+  <data key="d4">0</data>
+</node>
+<node id="Ангел Ангелов Марчев">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0482</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Мая Ламбовска">
+  <data key="d0">0.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0334</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Андрей Василев">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0439</data>
+  <data key="d3">1</data>
+  <data key="d4">0</data>
+</node>
+<node id="Иордан Йорданов">
+  <data key="d0">1.0</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0399</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Тодор Рачев Гичев">
+  <data key="d0">0.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0329</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Боряна Пелова">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0172</data>
+  <data key="d2">0.0697</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Иван Ганчев Иванов">
+  <data key="d0">2.0</data>
+  <data key="d1">0.0129</data>
+  <data key="d2">0.0703</data>
+  <data key="d3">0</data>
+  <data key="d4">1</data>
+</node>
+<node id="Ралица Иванчева Симеонова-Ганева">
+  <data key="d0">2.5</data>
+  <data key="d1">0.0663</data>
+  <data key="d2">0.1344</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Ангел Марчев">
+  <data key="d0">1.0</data>
+  <data key="d1">0.0059</data>
+  <data key="d2">0.0491</data>
+  <data key="d3">0</data>
+  <data key="d4">1</data>
+</node>
+<node id="Калоян Ганев">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0597</data>
+  <data key="d2">0.1117</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Александър Георгиев Димитров">
+  <data key="d0">0.5</data>
+  <data key="d1">0.0112</data>
+  <data key="d2">0.0437</data>
+  <data key="d3">0</data>
+  <data key="d4">1</data>
+</node>
+<node id="Мариян Милев">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0439</data>
+  <data key="d3">1</data>
+  <data key="d4">0</data>
+</node>
+<node id="Алдо Талиани">
+  <data key="d0">1.0</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0399</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Паоло Брандимарте">
+  <data key="d0">0.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0329</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Радостин Вазов">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0452</data>
+  <data key="d3">1</data>
+  <data key="d4">0</data>
+</node>
+<node id="Янаки Тодоров Андреев">
+  <data key="d0">1.0</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0403</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Нигрета Величкова">
+  <data key="d0">0.5</data>
+  <data key="d1">0.0124</data>
+  <data key="d2">0.0473</data>
+  <data key="d3">0</data>
+  <data key="d4">1</data>
+</node>
+<node id="Глория Христова">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0466</data>
+  <data key="d3">1</data>
+  <data key="d4">0</data>
+</node>
+<node id="Боряна Богданова">
+  <data key="d0">1.0</data>
+  <data key="d1">0.0</data>
+  <data key="d2">0.0408</data>
+  <data key="d3">0</data>
+  <data key="d4">0</data>
+</node>
+<node id="Деница Гаврилова">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0934</data>
+  <data key="d2">0.0951</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Теодора Върбанова">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0081</data>
+  <data key="d2">0.0612</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<node id="Бойко Амаров">
+  <data key="d0">1.5</data>
+  <data key="d1">0.0172</data>
+  <data key="d2">0.0697</data>
+  <data key="d3">1</data>
+  <data key="d4">1</data>
+</node>
+<edge source="Димитър Златинов" target="Мариела Ненова-Амар">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Димитър Златинов" target="Теодор Седларски">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Димитър Златинов" target="Илия Атанасов">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Димитър Златинов" target="Диляна Славова">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Теодор Седларски" target="Нансен Бахар">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Теодор Седларски" target="Милен Велушев">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Теодор Седларски" target="Божидар Недев">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Теодор Седларски" target="Стойко Митов">
+  <data key="d5">1.5</data>
+</edge>
+<edge source="Милен Велушев" target="Стефан Христов Петранов">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Стефан Христов Петранов" target="Любен Иванов">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Стефан Христов Петранов" target="Радостина Ивчева-Георгиева">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Стефан Христов Петранов" target="Божидар Недев">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Стефан Христов Петранов" target="Антон Антонов Герунов">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Стела Ралева" target="Стати Василев Статев">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Стела Ралева" target="Радостина Ивчева-Георгиева">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Стела Ралева" target="Илия Лингорски">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Стела Ралева" target="Лидия Кабатлийска-Андонова">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Цветан Мадански" target="Тодор Попов">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Цветан Мадански" target="Желю Дечев Владимиров">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Желю Дечев Владимиров" target="Ия Петкова">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Желю Дечев Владимиров" target="Иванка Михайлова">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Желю Дечев Владимиров" target="Златина Михайлова">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Желю Дечев Владимиров" target="Илияна Анкова">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Желю Дечев Владимиров" target="Марина Стефанова">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Желю Дечев Владимиров" target="Петър Ташев">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Желю Дечев Владимиров" target="Деница Гаврилова">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Даниел Касабов" target="Петър Пандушев Чобанов">
+  <data key="d5">1.5</data>
+</edge>
+<edge source="Илия Атанасов" target="Георги Димитров Менгов">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Георги Димитров Менгов" target="Антон Антонов Герунов">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Георги Димитров Менгов" target="Георги Сотиров">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Георги Димитров Менгов" target="Стефан Хаджитодоров">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Георги Димитров Менгов" target="Рени Панчева">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Росица Златинска" target="Пенчо Денчев Пенчев">
+  <data key="d5">1.5</data>
+</edge>
+<edge source="Любен Иванов" target="Георги Савов Чобанов">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Георги Савов Чобанов" target="Илияна Анкова">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Георги Савов Чобанов" target="Атанас Димитров Георгиев">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Георги Савов Чобанов" target="Николай Чудомиров Нетов">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Георги Савов Чобанов" target="Калоян Ганев">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Георги Савов Чобанов" target="Ралица Иванчева Симеонова-Ганева">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Стоян Шаламанов" target="Трайчо Стефанов Спасов">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Стоян Шаламанов" target="Екатерина Стефанова Сотирова-Петкова">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Олимпия Ведър-Величкова" target="Цветан Първанов Давидков">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Олимпия Ведър-Величкова" target="Иванка Тодорова Мавродиева-Георгиева">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Олимпия Ведър-Величкова" target="Ирена Младенова">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Цветан Първанов Давидков" target="Тодор Ялъмов">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Цветан Първанов Давидков" target="Ия Петкова">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Цветан Първанов Давидков" target="Иван Ангелов">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Цветан Първанов Давидков" target="Иванка Михайлова">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Цветан Първанов Давидков" target="Рая Каназирева">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Цветан Първанов Давидков" target="Марина Стефанова">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Цветан Първанов Давидков" target="Петър Ташев">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Десислава Иванова Йорданова" target="Мария-Антония Таразон Родон">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Десислава Иванова Йорданова" target="Хуан Хосе Хименес">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Десислава Иванова Йорданова" target="Рая Каназирева">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Десислава Иванова Йорданова" target="Ирена Младенова">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Десислава Иванова Йорданова" target="Алексей Потебня">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Владя Борисова" target="Божана Неделчева">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Владя Борисова" target="Пано Лулански">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Пано Лулански" target="Кирил Величков">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Мирослава Христова" target="Жан-Пиер Ньово">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Мирослава Христова" target="Жером Каби">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Тодор Ялъмов" target="Анастасия Миланова Бънкова">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Анастасия Миланова Бънкова" target="Иван Ангелов">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Анастасия Миланова Бънкова" target="Мария Трифонова">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Кирил Величков" target="Магдалена Иванова">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Алексей Потебня" target="Невяна Кръстева">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Невяна Кръстева" target="Деница Гаврилова">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Златина Михайлова" target="Ия Тодорова Петкова-Гурбалова">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Николета Войнова" target="Георги Н. Георгиев">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Николета Войнова" target="Слави М. Славов">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Виктор Йоцов" target="Гарабед Минасян">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Виктор Йоцов" target="Васил Тодоров">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Елеонора Станчева" target="Катерина Караиванова">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Елеонора Станчева" target="Коста Пергелов">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Адриан Маринчев" target="Стоян Димитров Стоянов">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Адриан Маринчев" target="Иван Душанов Иванов">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Стоян Димитров Стоянов" target="Николай Кацарски">
+  <data key="d5">1.5</data>
+</edge>
+<edge source="Марселен Йовоган" target="Иван Брешков">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Марселен Йовоган" target="Кольо Рачев">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Марселен Йовоган" target="Данаил Гушев">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Георги Ганев" target="Уилям Барнет">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Георги Ганев" target="Стивън Фазари">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Марио Касабов" target="Димитър Ненков Ненков">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Марио Касабов" target="Богомил Борисов Манов">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Богомил Борисов Манов" target="Радостин Вазов">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Антон Антонов Герунов" target="Рени Панчева">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Соня Милева - Божанова" target="Манол Рибов">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Соня Милева - Божанова" target="Ангел Геров">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Ангел Геров" target="Теодора Георгиева">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Светлана Бялкова" target="Дж. Шриеферс">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Светлана Бялкова" target="X. Деккерс">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Теодора Георгиева" target="Димитър Панайотов">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Фантина Рангелова" target="Димитър Паничков">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Фантина Рангелова" target="Гочо Гочев">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Атанас Димитров Георгиев" target="Антоанета Симова">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Атанас Димитров Георгиев" target="Мария Трифонова">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Десислава Калчева" target="Пресияна Стойкова Ненкова">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Емил Митов" target="Лиляна Павлова">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Емил Митов" target="Стефан Ангелов Симеонов">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Ивайло Найденов" target="Калин Боянов Филипов">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Ивайло Найденов" target="Бончо Иванов Бонев">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Мартина Арабаджиева" target="Албена Христова Вуцова">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Мартина Арабаджиева" target="Мария Стойчева">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Албена Христова Вуцова" target="Теодора Върбанова">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Николай Чудомиров Нетов" target="Боян Михайлов Ломев">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Николай Чудомиров Нетов" target="Теодора Върбанова">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Боян Михайлов Ломев" target="Ангел Марчев">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Иван Иванов" target="М. Петков">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Иван Иванов" target="М. Касчиев">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Камен Спасов" target="Минчо Халжийски">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Камен Спасов" target="Гео Гатев">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Деян Радев" target="Изабел Шнабел">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Деян Радев" target="Михаел Биндер">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Ангел А. Марчев" target="Ангел Ангелов Марчев">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Ангел А. Марчев" target="Мая Ламбовска">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Ангел Ангелов Марчев" target="Глория Христова">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Андрей Василев" target="Иордан Йорданов">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Андрей Василев" target="Тодор Рачев Гичев">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Боряна Пелова" target="Иван Ганчев Иванов">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Боряна Пелова" target="Ралица Иванчева Симеонова-Ганева">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Иван Ганчев Иванов" target="Бойко Амаров">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Ралица Иванчева Симеонова-Ганева" target="Нигрета Величкова">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Ралица Иванчева Симеонова-Ганева" target="Бойко Амаров">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Калоян Ганев" target="Александър Георгиев Димитров">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Мариян Милев" target="Алдо Талиани">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Мариян Милев" target="Паоло Брандимарте">
+  <data key="d5">0.5</data>
+</edge>
+<edge source="Радостин Вазов" target="Янаки Тодоров Андреев">
+  <data key="d5">1.0</data>
+</edge>
+<edge source="Глория Христова" target="Боряна Богданова">
+  <data key="d5">1.0</data>
+</edge>
+</graph></graphml>

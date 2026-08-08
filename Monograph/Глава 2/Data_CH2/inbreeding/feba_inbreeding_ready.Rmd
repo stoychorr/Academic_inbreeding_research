@@ -1,0 +1,605 @@
+---
+title: "Academic inbreeding at FEBA — network construction, centrality, and regressions"
+subtitle: "Reproduction of Приложение А1"
+author: "Stoycho Rusinov"
+date: "`r format(Sys.Date(), '%d %B %Y')`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+params:
+  data_dir: "data"
+  out_dir: "outputs"
+  rho: 0.5
+  katz_damping: 0.85
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE,
+                      fig.align = "center", dpi = 150)
+# Required packages (install once):
+#   install.packages(c("readxl", "stringi", "igraph", "survival",
+#                      "ggplot2", "knitr", "lubridate", "stargazer"))
+suppressPackageStartupMessages({
+  library(readxl)
+  library(stringi)
+  library(igraph)
+  library(survival)
+  library(ggplot2)
+  library(knitr)
+  library(lubridate)
+  library(stargazer)
+})
+DATA <- params$data_dir
+OUT  <- params$out_dir
+dir.create(OUT, showWarnings = FALSE)
+stopifnot(file.exists(file.path(DATA, "Book4.xlsx")),
+          file.exists(file.path(DATA, "inbreeding_at_FEBA.xlsx")))
+```
+
+This document rebuilds the supervisor and jury network from `Book4.xlsx`,
+computes three centrality measures off the weighted adjacency matrix W, merges
+them onto the FEBA roster in `inbreeding_at_FEBA.xlsx`, and runs the
+regression battery. It is meant to knit top to bottom with the two spreadsheets
+sitting in a `data/` folder next to the file.
+
+# 1  Name cleaning and canonicalisation
+
+The same person is written several ways across the three columns. The rules
+below strip academic titles, repair stray Latin look-alike letters inside
+Cyrillic tokens, unify the missing-value tokens, and then merge spelling
+variants of one person while refusing to merge two people who share a surname
+under different patronymics.
+
+```{r functions}
+
+MISSING <- c("no info","no data","n/a","na","nan","")
+
+LAT <- "aeopcxykmthBAEOPCXYKMTH"
+
+CYR <- "\u0430\u0435\u043e\u0440\u0441\u0445\u0443\u043a\u043c\u0442\u043d\u0412\u0410\u0415\u041e\u0420\u0421\u0425\u0423\u041a\u041c\u0422\u041d"
+
+TITLES <- c("\u043f\u0440\u043e\u0444\\.?","\u0434\u043e\u0446\\.?",
+            "\u0433\u043b\\.?\\s*\u0430\u0441\\.?","\\b\u0430\u0441\\.",
+            "\u0434\\.\u0438\u043a\\.\u043d\\.?","\u0434\\.\u043c\\.\u043d\\.?",
+            "\u0434\\.\u043d\\.?","\u0434-\u0440")
+
+fix_homoglyphs <- function(tok) {
+  if (!stri_detect_regex(tok, "[\u0400-\u04ff]")) return(tok)
+  chartr(LAT, CYR, tok)
+}
+
+clean_name <- function(raw) {
+  
+  if (is.na(raw) || !is.character(raw)) return(NA_character_)
+  s <- gsub("\u00a0", " ", raw, fixed = TRUE)
+  s <- stri_replace_all_regex(s, "\\p{C}", "")
+  s <- stri_trim_both(stri_replace_all_regex(s, "\\s+", " "))
+  if (tolower(s) %in% MISSING) return(NA_character_)
+  s <- stri_trim_both(stri_replace_all_regex(
+        s, "[-\u2013]\\s*(\u0437\u0430\u043c\\.?\\s*-?\\s*\u0434\u0435\u043a\u0430\u043d|\u0434\u0435\u043a\u0430\u043d).*$",
+        "", case_insensitive = TRUE))
+  for (pat in TITLES) s <- stri_replace_all_regex(s, pat, " ", case_insensitive = TRUE)
+  s <- stri_trim_both(stri_replace_all_regex(s, "\\s+", " "))
+  s <- gsub("^[ .,]+|[ .,]+$", "", s)
+  if (s == "") return(NA_character_)
+  toks <- strsplit(s, " ", fixed = TRUE)[[1]]
+  s <- paste(vapply(toks, fix_homoglyphs, character(1)), collapse = " ")
+  s <- gsub("^[ .,]+|[ .,]+$", "", s)
+  if (s == "") NA_character_ else s
+}
+
+.toks       <- function(n) strsplit(n, " ", fixed = TRUE)[[1]]
+.is_initial <- function(t) nchar(t) <= 2 && endsWith(t, ".")
+.signature  <- function(n) { ts <- .toks(n); if (length(ts) == 1) c(ts[1], "") else c(ts[1], ts[length(ts)]) }
+.patronymic <- function(n) {
+  ts <- .toks(n)
+  if (length(ts) >= 3 && !.is_initial(ts[2])) paste(ts[2:(length(ts) - 1)], collapse = " ") else NA_character_
+}
+
+canonicalise <- function(all_names) {
+  sig_key <- vapply(all_names, function(n) paste(.signature(n), collapse = "\u0001"), character(1))
+  canon <- setNames(all_names, all_names)
+  for (key in unique(sig_key)) {
+    members <- all_names[sig_key == key]
+    patrs <- unique(stats::na.omit(vapply(members, .patronymic, character(1))))
+    if (length(patrs) <= 1) {
+      with_p <- members[!is.na(vapply(members, .patronymic, character(1)))]
+      pool <- if (length(with_p)) with_p else members
+      target <- pool[which.max(vapply(pool, function(x) length(.toks(x)) * 1000 + nchar(x), numeric(1)))]
+      canon[members] <- target
+    } else {
+      canon[members] <- members
+    }
+  }
+  canon
+}
+
+build_edges <- function(raw, canon) {
+  out <- list()
+  for (i in seq_len(nrow(raw))) {
+    src <- clean_name(raw$Name[i]); if (is.na(src)) next
+    s <- if (src %in% names(canon)) canon[[src]] else src
+    for (cw in list(c("Advisor","advisor","1.0"), c("Joury_head","jury","0.5"))) {
+      tgt <- clean_name(raw[[cw[1]]][i]); if (is.na(tgt)) next
+      t <- if (tgt %in% names(canon)) canon[[tgt]] else tgt
+      out[[length(out) + 1]] <- data.frame(source = s, target = t, relation = cw[2],
+                                            weight = as.numeric(cw[3]), stringsAsFactors = FALSE)
+    }
+  }
+  do.call(rbind, out)
+}
+
+# Conley / Kojevnikov network-robust covariance for an lm fit
+network_robust_se <- function(model, frame, g, rho = 0.5) {
+  nm <- frame$canon
+  D  <- distances(g, v = nm, to = nm)
+  K  <- rho ^ D; K[!is.finite(D)] <- 0
+  X  <- model.matrix(model); u <- residuals(model)
+  bread <- solve(crossprod(X))
+  V <- bread %*% (t(X) %*% (K * (u %o% u)) %*% X) %*% bread
+  sqrt(diag(V))
+}
+
+hc1_se <- function(model) {
+  X <- model.matrix(model); u <- residuals(model)
+  n <- nrow(X); k <- ncol(X); bread <- solve(crossprod(X))
+  V <- bread %*% (t(X) %*% diag(u^2) %*% X) %*% bread * (n / (n - k))
+  sqrt(diag(V))
+}
+```
+
+# 2  Network and the adjacency matrix W
+
+Ties are weighted 1.0 for a supervisor-doctoral relationship and 0.5 for a jury
+relationship, summed when a pair shares both, undirected, with a zero diagonal.
+
+```{r network}
+raw <- as.data.frame(read_excel(file.path(DATA, "Book4.xlsx")))
+
+all_names <- unique(stats::na.omit(unlist(lapply(
+  c("Name","Advisor","Joury_head"),
+  function(c) vapply(raw[[c]], clean_name, character(1))))))
+
+canon <- canonicalise(all_names)
+edges <- build_edges(raw, canon)
+
+# self-loop guard: a student resolving to their own supervisor signals a bad merge
+
+loop_rows <- edges[edges$source == edges$target, , drop = FALSE]
+
+loop_sigs <- if (nrow(loop_rows))
+
+    unique(apply(loop_rows, 1, function(r) paste(.signature(r[["source"]]), collapse = "\u0001"))) else character(0)
+
+if (length(loop_sigs)) {
+  
+  sig_key <- vapply(all_names, function(n) paste(.signature(n), collapse = "\u0001"), character(1))
+  
+  for (k in loop_sigs) { m <- all_names[sig_key == k]; canon[m] <- m }
+  
+  edges <- build_edges(raw, canon)
+
+  }
+
+edges <- edges[edges$source != edges$target, ]
+
+g <- graph_from_data_frame(edges[, c("source","target","weight")], directed = FALSE)
+
+g <- simplify(g, edge.attr.comb = list(weight = "sum"))
+
+nodes_ord <- sort(V(g)$name)
+
+W <- as.matrix(as_adjacency_matrix(g, attr = "weight"))[nodes_ord, nodes_ord]
+
+stopifnot(isTRUE(all.equal(W, t(W))), all(diag(W) == 0))
+
+write.csv(W, file.path(OUT, "W_full.csv"), fileEncoding = "UTF-8")
+
+cat(sprintf("network: %d nodes, %d edges; W is %d x %d, max weight %.1f\n",
+            gorder(g), gsize(g), nrow(W), ncol(W), max(W)))
+```
+
+# 3. Centralities
+
+Weighted degree is the node strength. Eigenvector centrality is computed on the
+giant component only and set to zero elsewhere, because the leading eigenvector
+of a fragmented graph concentrates in the dominant component. Katz centrality is
+computed on the full graph with alpha equal to a damping of `r params$katz_damping`
+over the spectral radius, so isolates still receive a graded baseline.
+
+```{r centralities}
+roster <- as.data.frame(read_excel(file.path(DATA, "inbreeding_at_FEBA.xlsx"), sheet = "main_database"))
+
+roster <- roster[!is.na(roster$Name), ]
+roster$canon <- vapply(roster$Name, function(x) {
+  cc <- clean_name(x)
+  if (is.na(cc)) NA_character_ else if (cc %in% names(canon)) canon[[cc]] else cc
+}, character(1))
+
+missing_v <- setdiff(unique(roster$canon), V(g)$name)
+if (length(missing_v)) g <- add_vertices(g, length(missing_v), name = missing_v)
+
+str_v <- strength(g, weights = E(g)$weight)
+
+comp   <- components(g)
+giant  <- which.max(comp$csize)
+g_core <- induced_subgraph(g, V(g)[comp$membership == giant])
+ev_core <- eigen_centrality(g_core, weights = E(g_core)$weight, scale = FALSE)$vector
+eig_v <- setNames(rep(0, gorder(g)), V(g)$name); eig_v[names(ev_core)] <- ev_core
+
+A   <- as.matrix(as_adjacency_matrix(g, attr = "weight"))
+lam <- max(abs(eigen(A, only.values = TRUE)$values))
+ALPHA <- params$katz_damping / lam
+katz_v <- solve(diag(nrow(A)) - ALPHA * A, rep(1, nrow(A)))
+names(katz_v) <- rownames(A)
+
+roster$deg_strength <- unname(str_v[roster$canon]);  roster$deg_strength[is.na(roster$deg_strength)] <- 0
+roster$eigen        <- unname(eig_v[roster$canon]);  roster$eigen[is.na(roster$eigen)] <- 0
+roster$katz         <- unname(katz_v[roster$canon])
+roster$in_giant     <- as.integer(roster$canon %in% V(g_core)$name)
+
+cat(sprintf("faculty %d, matched %d, isolates %d, in giant %d; lambda_max %.3f, alpha %.4f\n",
+            nrow(roster), sum(roster$canon %in% V(g)$name),
+            sum(roster$deg_strength == 0), sum(roster$in_giant), lam, ALPHA))
+```
+
+# 4  Outcome and control variables
+
+The code below converts the dates, creates the dependent variables and prepares
+standardized centrality measures.
+
+```{r variables}
+fix_date <- function(x) {
+  if (inherits(x, "Date")) return(x)
+  if (inherits(x, "POSIXt")) return(as.Date(x))
+
+  # Numeric Excel dates
+  if (is.numeric(x)) {
+    return(as.Date(x, origin = "1899-12-30"))
+  }
+
+  # Character dates and Excel dates stored as text
+  x <- trimws(as.character(x))
+  x[x %in% c("", "NA", "N/A", "-")] <- NA
+
+  out <- as.Date(parse_date_time(
+    x,
+    orders = c("ymd HMS", "dmy HMS", "mdy HMS",
+               "ymd", "dmy", "mdy", "Y"),
+    quiet = TRUE
+  ))
+
+  excel_number <- suppressWarnings(as.numeric(x))
+  use_excel <- is.na(out) & !is.na(excel_number) & excel_number > 10000
+  out[use_excel] <- as.Date(excel_number[use_excel], origin = "1899-12-30")
+
+  out
+}
+
+roster$PHD_Awarded <- fix_date(roster$PHD_Awarded)
+roster$FIRST_PT_FEBA <- fix_date(roster$FIRST_PT_FEBA)
+
+roster$delay_yrs <- as.numeric(
+  roster$FIRST_PT_FEBA - roster$PHD_Awarded
+) / 365.25
+
+roster$Fast <- as.integer(roster$delay_yrs <= 1)
+roster$cohort <- as.numeric(format(roster$PHD_Awarded, "%Y"))
+roster$cohort_c <- roster$cohort - 2010
+roster$POST_2010 <- as.integer(roster$cohort >= 2010)
+
+roster$Scopus_all <- suppressWarnings(as.numeric(as.character(roster$Scopus_all)))
+roster$log_scopus <- log1p(roster$Scopus_all)
+roster$dept <- factor(trimws(as.character(roster$Department)))
+roster$gender <- suppressWarnings(as.numeric(as.character(roster$Gender)))
+roster$AI <- suppressWarnings(as.numeric(as.character(roster$AI)))
+
+zpop <- function(x) {
+  x <- as.numeric(x)
+  s <- sqrt(mean((x - mean(x, na.rm = TRUE))^2, na.rm = TRUE))
+  if (is.na(s) || s == 0) return(rep(0, length(x)))
+  (x - mean(x, na.rm = TRUE)) / s
+}
+
+roster$z_deg_strength <- zpop(roster$deg_strength)
+roster$z_eigen <- zpop(roster$eigen)
+roster$z_katz <- zpop(roster$katz)
+
+keep <- c(
+  "Name", "canon", "dept", "cohort", "cohort_c", "POST_2010",
+  "delay_yrs", "Fast", "AI", "Scopus_all", "log_scopus", "gender",
+  "deg_strength", "eigen", "katz", "in_giant",
+  "z_deg_strength", "z_eigen", "z_katz"
+)
+
+write.csv(
+  roster[, keep],
+  file.path(OUT, "feba_merged_centrality.csv"),
+  row.names = FALSE,
+  fileEncoding = "UTF-8"
+)
+
+cat("Non-missing PhD dates:", sum(!is.na(roster$PHD_Awarded)), "of", nrow(roster), "\n")
+cat("Non-missing FEBA dates:", sum(!is.na(roster$FIRST_PT_FEBA)), "of", nrow(roster), "\n")
+cat("Non-missing delays:", sum(!is.na(roster$delay_yrs)), "of", nrow(roster), "\n")
+```
+
+# 5  Regression specifications
+
+Each model uses one centrality measure at a time. Department controls are used
+when at least two departments remain in the usable estimation sample. This
+prevents the factor-contrast error caused by a one-level department variable.
+
+## Model group 1  Academic inbreeding
+
+```{r regressions-ai}
+ai_data <- roster[complete.cases(roster[, c(
+  "AI", "z_deg_strength", "z_eigen", "z_katz",
+  "cohort_c", "log_scopus", "gender", "dept"
+)]), ]
+ai_data$dept <- droplevels(ai_data$dept)
+ai_has_dept <- nlevels(ai_data$dept) >= 2
+
+if (ai_has_dept) {
+  ai_degree <- glm(AI ~ z_deg_strength + dept + cohort_c + log_scopus + gender,
+                   data = ai_data, family = binomial)
+  ai_eigen <- glm(AI ~ z_eigen + dept + cohort_c + log_scopus + gender,
+                  data = ai_data, family = binomial)
+  ai_katz <- glm(AI ~ z_katz + dept + cohort_c + log_scopus + gender,
+                 data = ai_data, family = binomial)
+} else {
+  ai_degree <- glm(AI ~ z_deg_strength + cohort_c + log_scopus + gender,
+                   data = ai_data, family = binomial)
+  ai_eigen <- glm(AI ~ z_eigen + cohort_c + log_scopus + gender,
+                  data = ai_data, family = binomial)
+  ai_katz <- glm(AI ~ z_katz + cohort_c + log_scopus + gender,
+                 data = ai_data, family = binomial)
+}
+
+stargazer(
+  ai_degree, ai_eigen, ai_katz,
+  type = "text",
+  title = "Network centrality and academic inbreeding",
+  column.labels = c("Degree", "Eigenvector", "Katz"),
+  dep.var.labels = "Academic inbreeding",
+  keep = c("z_deg_strength", "z_eigen", "z_katz",
+           "cohort_c", "log_scopus", "gender"),
+  covariate.labels = c(
+    "Weighted degree centrality",
+    "Eigenvector centrality",
+    "Katz centrality",
+    "PhD cohort centred at 2010",
+    "Log Scopus publications",
+    "Gender"
+  ),
+  add.lines = list(c("Department controls",
+                     ifelse(ai_has_dept, "Yes", "No"),
+                     ifelse(ai_has_dept, "Yes", "No"),
+                     ifelse(ai_has_dept, "Yes", "No"))),
+  keep.stat = c("n", "ll", "aic"),
+  digits = 3,
+  notes = "Logit coefficients.",
+  notes.append = FALSE
+)
+```
+
+## Model group 2  Years from PhD to first FEBA appointment
+
+```{r regressions-delay}
+delay_data <- roster[complete.cases(roster[, c(
+  "delay_yrs", "z_deg_strength", "z_eigen", "z_katz",
+  "cohort_c", "log_scopus", "gender", "dept"
+)]), ]
+delay_data$dept <- droplevels(delay_data$dept)
+delay_has_dept <- nlevels(delay_data$dept) >= 2
+
+if (delay_has_dept) {
+  delay_degree <- lm(delay_yrs ~ z_deg_strength + dept + cohort_c + log_scopus + gender,
+                     data = delay_data)
+  delay_eigen <- lm(delay_yrs ~ z_eigen + dept + cohort_c + log_scopus + gender,
+                    data = delay_data)
+  delay_katz <- lm(delay_yrs ~ z_katz + dept + cohort_c + log_scopus + gender,
+                   data = delay_data)
+} else {
+  delay_degree <- lm(delay_yrs ~ z_deg_strength + cohort_c + log_scopus + gender,
+                     data = delay_data)
+  delay_eigen <- lm(delay_yrs ~ z_eigen + cohort_c + log_scopus + gender,
+                    data = delay_data)
+  delay_katz <- lm(delay_yrs ~ z_katz + cohort_c + log_scopus + gender,
+                   data = delay_data)
+}
+
+stargazer(
+  delay_degree, delay_eigen, delay_katz,
+  type = "text",
+  title = "Network centrality and appointment delay",
+  column.labels = c("Degree", "Eigenvector", "Katz"),
+  dep.var.labels = "Years from PhD to FEBA appointment",
+  keep = c("z_deg_strength", "z_eigen", "z_katz",
+           "cohort_c", "log_scopus", "gender"),
+  covariate.labels = c(
+    "Weighted degree centrality",
+    "Eigenvector centrality",
+    "Katz centrality",
+    "PhD cohort centred at 2010",
+    "Log Scopus publications",
+    "Gender"
+  ),
+  add.lines = list(c("Department controls",
+                     ifelse(delay_has_dept, "Yes", "No"),
+                     ifelse(delay_has_dept, "Yes", "No"),
+                     ifelse(delay_has_dept, "Yes", "No"))),
+  keep.stat = c("n", "rsq", "adj.rsq", "f"),
+  digits = 3,
+  notes = "OLS coefficients.",
+  notes.append = FALSE
+)
+```
+
+## Model group 3  Appointment within one year
+
+```{r regressions-fast}
+fast_data <- roster[complete.cases(roster[, c(
+  "Fast", "z_deg_strength", "z_eigen", "z_katz",
+  "cohort_c", "log_scopus", "gender", "dept"
+)]), ]
+fast_data$dept <- droplevels(fast_data$dept)
+fast_has_dept <- nlevels(fast_data$dept) >= 2
+
+if (fast_has_dept) {
+  fast_degree <- glm(Fast ~ z_deg_strength + dept + cohort_c + log_scopus + gender,
+                     data = fast_data, family = binomial)
+  fast_eigen <- glm(Fast ~ z_eigen + dept + cohort_c + log_scopus + gender,
+                    data = fast_data, family = binomial)
+  fast_katz <- glm(Fast ~ z_katz + dept + cohort_c + log_scopus + gender,
+                   data = fast_data, family = binomial)
+} else {
+  fast_degree <- glm(Fast ~ z_deg_strength + cohort_c + log_scopus + gender,
+                     data = fast_data, family = binomial)
+  fast_eigen <- glm(Fast ~ z_eigen + cohort_c + log_scopus + gender,
+                    data = fast_data, family = binomial)
+  fast_katz <- glm(Fast ~ z_katz + cohort_c + log_scopus + gender,
+                   data = fast_data, family = binomial)
+}
+
+stargazer(
+  fast_degree, fast_eigen, fast_katz,
+  type = "text",
+  title = "Network centrality and fast academic appointment",
+  column.labels = c("Degree", "Eigenvector", "Katz"),
+  dep.var.labels = "Appointment within one year",
+  keep = c("z_deg_strength", "z_eigen", "z_katz",
+           "cohort_c", "log_scopus", "gender"),
+  covariate.labels = c(
+    "Weighted degree centrality",
+    "Eigenvector centrality",
+    "Katz centrality",
+    "PhD cohort centred at 2010",
+    "Log Scopus publications",
+    "Gender"
+  ),
+  add.lines = list(c("Department controls",
+                     ifelse(fast_has_dept, "Yes", "No"),
+                     ifelse(fast_has_dept, "Yes", "No"),
+                     ifelse(fast_has_dept, "Yes", "No"))),
+  keep.stat = c("n", "ll", "aic"),
+  digits = 3,
+  notes = "Logit coefficients.",
+  notes.append = FALSE
+)
+```
+
+## Model group 4  Cox proportional-hazards models
+
+```{r regressions-cox}
+cox_data <- roster[complete.cases(roster[, c(
+  "delay_yrs", "z_deg_strength", "z_eigen", "z_katz",
+  "cohort_c", "log_scopus", "gender", "POST_2010", "dept"
+)]), ]
+cox_data$dept <- droplevels(cox_data$dept)
+cox_has_dept <- nlevels(cox_data$dept) >= 2
+
+cox_data$duration <- cox_data$delay_yrs - min(cox_data$delay_yrs) + 0.01
+cox_data$event <- 1
+
+if (cox_has_dept) {
+  cox_degree <- coxph(Surv(duration, event) ~ z_deg_strength + dept + cohort_c +
+                        log_scopus + gender + POST_2010, data = cox_data)
+  cox_eigen <- coxph(Surv(duration, event) ~ z_eigen + dept + cohort_c +
+                       log_scopus + gender + POST_2010, data = cox_data)
+  cox_katz <- coxph(Surv(duration, event) ~ z_katz + dept + cohort_c +
+                      log_scopus + gender + POST_2010, data = cox_data)
+} else {
+  cox_degree <- coxph(Surv(duration, event) ~ z_deg_strength + cohort_c +
+                        log_scopus + gender + POST_2010, data = cox_data)
+  cox_eigen <- coxph(Surv(duration, event) ~ z_eigen + cohort_c +
+                       log_scopus + gender + POST_2010, data = cox_data)
+  cox_katz <- coxph(Surv(duration, event) ~ z_katz + cohort_c +
+                      log_scopus + gender + POST_2010, data = cox_data)
+}
+
+stargazer(
+  cox_degree, cox_eigen, cox_katz,
+  type = "text",
+  title = "Network centrality and appointment hazard",
+  column.labels = c("Degree", "Eigenvector", "Katz"),
+  dep.var.labels = "Appointment hazard",
+  keep = c("z_deg_strength", "z_eigen", "z_katz",
+           "cohort_c", "log_scopus", "gender", "POST_2010"),
+  covariate.labels = c(
+    "Weighted degree centrality",
+    "Eigenvector centrality",
+    "Katz centrality",
+    "PhD cohort centred at 2010",
+    "Log Scopus publications",
+    "Gender",
+    "Post-2010 PhD cohort"
+  ),
+  add.lines = list(c("Department controls",
+                     ifelse(cox_has_dept, "Yes", "No"),
+                     ifelse(cox_has_dept, "Yes", "No"),
+                     ifelse(cox_has_dept, "Yes", "No"))),
+  keep.stat = c("n", "ll"),
+  digits = 3,
+  notes = "Cox coefficients. Positive coefficients imply a higher appointment hazard.",
+  notes.append = FALSE
+)
+```
+
+# 6  Figures
+
+```{r forest, fig.width=9, fig.height=4.2}
+fp <- data.frame(
+  Centrality = c("Weighted degree", "Eigenvector", "Katz"),
+  Estimate = c(
+    coef(delay_degree)["z_deg_strength"],
+    coef(delay_eigen)["z_eigen"],
+    coef(delay_katz)["z_katz"]
+  ),
+  SE = c(
+    summary(delay_degree)$coefficients["z_deg_strength", "Std. Error"],
+    summary(delay_eigen)$coefficients["z_eigen", "Std. Error"],
+    summary(delay_katz)$coefficients["z_katz", "Std. Error"]
+  )
+)
+
+fp$lo <- fp$Estimate - 1.96 * fp$SE
+fp$hi <- fp$Estimate + 1.96 * fp$SE
+
+ggplot(fp, aes(Estimate, Centrality)) +
+  geom_vline(xintercept = 0, linetype = "dashed") +
+  geom_errorbarh(aes(xmin = lo, xmax = hi), height = 0) +
+  geom_point(size = 3) +
+  labs(
+    title = "Network centrality and appointment delay",
+    x = "Years from PhD to FEBA appointment per one SD increase",
+    y = NULL
+  ) +
+  theme_minimal()
+```
+
+```{r netplot, fig.width=10, fig.height=8}
+repcount <- table(edges$target)
+core <- intersect(V(g_core)$name, names(repcount)[repcount >= 1])
+core <- core[str_v[core] >= 2.0]
+vcol <- ifelse(V(g)$name %in% core, "#2f7fd1", "#b9c0c7")
+vsz  <- 3 + 6 * (str_v[V(g)$name] / max(str_v))
+set.seed(11); lay <- norm_coords(layout_with_fr(g, weights = E(g)$weight), -1, 1, -1, 1)
+op <- par(mar = c(0, 0, 2, 0))
+plot(g, layout = lay, rescale = FALSE,
+     vertex.color = vcol, vertex.frame.color = "white",
+     vertex.size = vsz, vertex.label = NA,
+     edge.color = ifelse(E(g)$weight >= 1, "#9aa6b2", "#cdd5dd"),
+     edge.width = 0.5 + E(g)$weight)
+idx <- which(V(g)$name %in% core)
+text(lay[idx, 1], lay[idx, 2], labels = V(g)$name[idx], cex = 0.6, col = "#10243a")
+title("Genealogical network of academic reproduction (blue = reproducer hubs)")
+par(op)
+```
+
+# 7  Session information
+
+```{r session}
+sessionInfo()
+```
